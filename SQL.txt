@@ -1,0 +1,128 @@
+SQL:
+
+DATA:
+ 
+	Data is a raw fact which is discribe the properties offen NDT or Object.
+
+NDT or OBJECT:
+	
+	Anything which is physical excest its refer to NDT 
+
+DATA BASE:
+	it is a platform or medeum where is stored data systamatic organized manner.
+
+BASIC OPERATION OF DATABASE:
+	Create read update delete.
+
+DBMS:(Data base management syatem)
+	Is a software to maintain and manage a Data base.
+Features:
+ Security and Athundecation.
+
+Types of DBMS:
+ Network DBMS
+ Object orented DBMS
+ Hirarical DBMS
+ R DBMS
+
+R DBMS:
+	Is a type of DBMS. where we stored the data in the form of Table or relation.
+	If DBMS Follows relational model is also called R DBMS.
+	If DBMS follows EFCADD rule is also called R DBMS.
+	We communicate with the R DBMS we use an language strucared Query language(SQL). 
+
+EF CADD TOOL:
+	A data must be single value data or atomic data. We can stored a data in multiple tables.
+	 
+	And also we can extablse connection any two tables by using Key attribute. 
+	To validate the data we can assign data types and constrains.
+	Data types are mantaory but the constarins or opptinal.
+	
+DATA TYPES:
+	1. char(Fixed memory length)
+	2. varchar
+	3. Large object
+	4. Date
+	5. number
+
+Type of data or kind of data which is used in memory location.
+	CHAR which is used to store the character we can stored digits enclosed with single''.
+Syntex:
+	char(size); //(maximum 2000)
+
+Varchar: It is used to store the char 
+Syntex:
+	varchar(size);
+	In varchar unused memory is gives to the memory again. its called variable length memory location.
+[Varchar2(size 4000)]
+
+Large Object:
+	1. char large object
+	2. binary large object
+1:
+	it is used to store large amount of char. we can store upto 4GB.
+Syntex:
+	CLOB;
+2:
+	This datatype used to binary object such as audio file video file image PDF Etc.., in the form of binary format.
+Syntex:
+	BLOB;
+
+DATE:(Store date)
+		DD-MM-YYY(past/feature)
+			YY( current)
+		DD-MON-23
+Constrains:
+	
+	1. Unique 
+	2. NOTNULL
+	3. check
+	4. Primary key(commination of unique and NOTNULL)
+	5. forgin key
+
+UNIQUE: 
+	Avoid duplicate value which are entered in to the cell.
+NOTNULL:
+	Is used to reprecent the cell should not be empty.
+NULL:
+	twhich is used to represent the Empty cell or Nothing .NULL does not Occupaid the memory.
+	NULL = NULL (not same) Any opeator performed with NULL result end will be NULL.
+CHECK:
+	Syntex:
+	Check(Condition);
+		It is used to provide the Extra condition to a column
+PRIMAEY KEY:
+	A table can have only one primary key(Data base starnded)
+	Primary key always combination of unique and NOTNULL.
+	It is not manitory to have primary key in a table but disignwise differable.
+	Referntial intigrity constarin
+FOREGIN KEY:
+	Is is used to extablse the connection of any 2 table.
+	A Primary key of table is eligible for foregin key in Another table.
+	Foregin key accect
+	Also known as referential integrity constrains.
+
+	
+SQL Statement:
+	1. DATA Definition language(DDL)[Table creation]
+		1. Create
+		2. Rename
+		3. Alter
+		4. Trungate
+		5. Draw
+	2. DATA Manupilation Language(DML)[TC]
+		1. Insert
+		2. update
+		3. Delete
+	3. Transaction Control Language(TCL)[TC]
+		1. Commit
+		2. Savepoint
+		3. rollback
+	4. DATA Control Language(DCL)[TC]
+		1. rand
+		2. Revoke
+	5. Data query language(DQL)
+		1. Select
+		2. Projection
+		3. Joints
+		4. Selections

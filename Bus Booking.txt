@@ -1,0 +1,163 @@
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Scanner;
+
+class Bus{
+    int busNo;
+    int capcity;
+    boolean ac;
+Bus(int busNo,int capcity, boolean ac){
+       this. busNo = busNo;
+       this. capcity = capcity;
+        this. ac = ac;
+}
+    public int getBusNo() {
+        return busNo;
+    }
+
+    public void setBusNo(int busNo) {
+    if( busNo < 0 )
+        this.busNo = busNo;
+    }
+
+    public int getCapcity() {
+        return capcity;
+    }
+
+    public void setCapcity(int capcity) {
+       this. capcity = capcity;
+    }
+
+    public void display(){
+        System.out.println("busno "+ busNo + " capcity "+ capcity + " ac "+ ac);
+    }
+}
+class Booking {
+    private String name;
+    private int busNo;
+    private int seats;
+
+    Booking() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("enter the name ");
+        name = sc.nextLine();
+        System.out.println("enter the busNO ");
+        busNo = sc.nextInt();
+        System.out.println("enter the seats");
+        seats = sc.nextInt();
+
+    }
+
+    public void setBusNo(int busNo) {
+        this.busNo = busNo;
+    }
+
+    public int getBusNo() {
+        return busNo;
+    }
+
+    public int getSeats() {
+        return seats;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSeat(int seats) {
+        this.seats = seats;
+    }
+
+    public void display() {
+        System.out.println(name + " " + " bus no " + busNo + " " + seats + "seats booked");
+    }
+
+    public boolean isAvailable(ArrayList<Bus> buses) {
+        int capacity = 0;
+
+        for (Bus b : buses) {
+            if (busNo == b.getBusNo()) {
+                capacity = b.getCapcity();
+
+
+            }
+            if (seats <= capacity) {
+                b.setCapcity( capacity - seats);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean cancel(String name, ArrayList<Booking> bookings, ArrayList<Bus> buses) {
+        int seats = 0;
+        int tempBusno = 0;
+        for (Booking booking : bookings) {
+            if (booking.name.equalsIgnoreCase(name)){
+                seats = booking.seats;
+                tempBusno = booking.busNo;
+            }
+        }
+        for (Bus bus : buses){
+            if (bus.busNo == tempBusno){
+                bus.setCapcity(bus.capcity + seats );
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+
+public class BusDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Booking> bookings = new ArrayList<>();
+        ArrayList<Bus> buses = new ArrayList<>();
+        buses.add(new Bus(1, 45, true));
+        buses.add(new Bus(2, 40, false));
+
+
+        while (true) {
+            for (int i = 0; i < buses.size(); i++) {
+                buses.get(i).display();
+            }
+            System.out.println("1 --> book ");
+            System.out.println("2--> cancel");
+            System.out.println("3--> display all bookings");
+            int choice = sc.nextInt();
+            sc.nextLine();
+            switch (choice) {
+                case 1:
+                Booking b = new Booking();
+               if (b.isAvailable(buses)){
+                   bookings.add(b);
+                   System.out.println("booked...");
+               }
+               else {
+                   System.out.println(" no seats available");
+               }
+               break;
+                case 2:{
+                     System.out.println("enter the name " );
+                     String name = sc.nextLine();
+                    if (Booking.cancel(name,bookings,buses)){
+                    System.out.println("canceled");
+                }
+                }
+                 break;
+                case 3:
+                    for (Booking booking : bookings){
+                        booking.display();
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + choice);
+            }
+        }
+    }
+}

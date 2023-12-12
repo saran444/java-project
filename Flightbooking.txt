@@ -1,0 +1,182 @@
+import com.mysql.cj.exceptions.StreamingNotifiable;
+
+import java.sql.*;
+import java.util.Scanner;
+import java.util.Stack;
+class ConnectionDB{
+    private static final String url = "jdbc:mysql://localhost:3306/busreservation";
+    static final String user = "root";
+    static final String pass = "2511";
+    public static Connection getConnection()throws SQLException{
+        return  DriverManager.getConnection(url,user,pass);
+    }
+
+}
+class BusOpertion {
+    public static void updateCapcity(int capcity, int busno) throws SQLException {
+        String query = "update bus set capcity = ? where busno = ?";
+        Connection con = ConnectionDB.getConnection();
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1,capcity);
+        ps.setInt(2,busno);
+        int rows = ps.executeUpdate();
+        System.out.println("no of rows affected " + rows);
+    }
+
+    // update table_name
+    // set col = val, col = val
+    // where condition
+    public static void insertDetails(int busno, int capcity, boolean ac) throws SQLException {
+        String query = "insert into bus values ( ?, ?, ? )";
+        Connection con = ConnectionDB.getConnection();
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, busno);
+        ps.setInt(2, capcity);
+        ps.setBoolean (3, ac);
+        int rows = ps.executeUpdate();
+        System.out.println("no of rows affected " + rows);
+    }
+
+    public static int getCapcity(int busno) throws SQLException {
+        String query = "select capcity from bus where busno = ? ;";
+        Connection con = ConnectionDB.getConnection();
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1,busno);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1);
+    }
+
+    public static void busDetails() throws SQLException {
+        String query = "select * from bus;";
+        Connection con = ConnectionDB.getConnection();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()) {
+            System.out.print(" busno "+ rs.getInt(1));
+            System.out.print(" capcity " +rs.getInt(2));
+            System.out.print(" Ac "  +rs.getBoolean(3));
+            System.out.println();
+            System.out.println("----------------------------------");
+        }
+    }
+}
+class  BookingOperation{
+    public static void bookingDetails() throws SQLException {
+        String query = "select * from bookings;";
+        Connection con = ConnectionDB.getConnection();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()) {
+            System.out.print(" busno "+ rs.getInt(1));
+            System.out.print(" name " +rs.getString(2));
+            System.out.print(" booked tickets "  +rs.getInt(3));
+            System.out.println();
+            System.out.println("----------------------------------");
+        }
+    }
+    public static boolean removeRecord( String name) throws SQLException {
+        String query = "delete from bookings where name = ? ;";
+        Connection con = ConnectionDB.getConnection();
+        PreparedStatement ps = con.prepareStatement(query);
+
+        ps.setString(1,name);
+        int rows  = ps.executeUpdate();
+        System.out.println("no of rows affected "+ rows);
+        return true;
+    }
+    public static int getSeats(int busno, String name) throws SQLException {
+        String query = "select seat from bookings where busno = ? and name = ?;";
+        Connection con = ConnectionDB.getConnection();
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1,busno);
+        ps.setString(2,name);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1);
+    }
+    public static void insert(int busno,String name, int seat) throws SQLException {
+        String query = "insert into bookings values ( ?, ?, ? )";
+        Connection con = ConnectionDB.getConnection();
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, busno);
+        ps.setString(2, name);
+        ps.setInt(3,seat);
+
+        int rows = ps.executeUpdate();
+        System.out.println("no of rows affected " + rows);
+    }
+
+}
+class Booking{
+    public static boolean isAvailable(String name,int busNo, int seat)throws SQLException{
+        int capcity = BusOpertion.getCapcity(busNo);
+        if (seat < capcity){
+            BookingOperation.insert(busNo, name, seat);
+            capcity -= seat;
+            BusOpertion.updateCapcity(capcity,busNo);
+            return true;
+        }
+        return false;
+    }
+    public static boolean cancel(int busno ,String name)throws SQLException{
+        int seats = BookingOperation.getSeats(busno,name);
+        seats += BusOpertion.getCapcity(busno);
+        BusOpertion.updateCapcity(seats,busno);
+        if (BookingOperation.removeRecord(name)){
+            return true;
+        }
+        return false;
+    }
+
+}
+public class Demo {
+    public static void main(String[] args) throws SQLException {
+        Scanner sc = new Scanner(System.in);
+
+
+        while (true) {
+            BusOpertion.busDetails();
+            System.out.println("------------------------------------");
+            System.out.println("enter 1 to book");
+            System.out.println("enter 2 to cancle");
+            System.out.println("enter 3 to show all the bookings");
+            int choice = sc.nextInt();
+            sc.nextLine();
+            switch (choice) {
+                case 1:
+                    System.out.println("enter the name ");
+                    String name = sc.nextLine();
+                    System.out.println(" enter bus no ");
+                    int busno = sc.nextInt();
+                    System.out.println("enter no of seats ");
+                    int seat = sc.nextInt();
+                    if (Booking.isAvailable(name, busno, seat)) {
+                        System.out.println("booked...");
+                    } else {
+                        System.out.println("no seats available");
+                    }
+                    break;
+                case 2:
+                    System.out.println("enter the bus no ");
+                    busno = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("enter the name ");
+                    name = sc.nextLine();
+                    if (Booking.cancel(busno, name)) {
+                        System.out.println("your ticket has been canceled...");
+                    } else {
+                        System.out.println("invalid details");
+                    }
+                    break;
+                case 3:
+                    BookingOperation.bookingDetails();
+                    break;
+                case 4:
+                    BusOpertion.insertDetails(3, 66, true);
+
+            }
+
+        }
+
+    }

@@ -1,0 +1,61 @@
+class TicTakToc{
+      char board[][];
+      TicTakToc(){
+            board = new char[3][3];
+            initialBoard();
+      }
+      public void initialBoard(){
+            for (int i=0;i<3;i++) {
+                  for (int j = 0; j < 3; j++) {
+                        board[i][j] = ' ';
+                  }
+
+            }
+      }
+      public void placeMark(int row, int col , char mark){
+            board [row] [col] = mark;
+      }
+      public void display(){
+            System.out.println("-------------");
+            for (int i=0;i<3;i++){
+                  System.out.print("| ");
+                  for (int j=0; j<3;j++){
+                        System.out.print(board[i][j]+" | ");
+                  }
+                  System.out.println();
+                  System.out.println("-------------");
+            }
+      }
+      public boolean ColumnWin(){
+            for (int j=0; j<3; j++) {
+                  if (board[0][j] !=' '&& board[0][j] == board[1][j] &&
+                          board[1][j] == board[2][j]) {
+                        return true;
+                  }
+            }
+            return false;
+      }
+      public boolean rowWin(){
+            for (int i=0; i<3; i++) {
+                  if (board[i][0] !=' ' && board[i][0] == board[i][1] &&
+                          board[i][1] == board[i][2]) {
+                        return true;
+                  }
+            }
+            return false;
+      }
+}
+
+public class Main {
+      public static void main(String[] args) {
+            TicTakToc t =new TicTakToc();
+            t.display();
+            t.placeMark(0,0,'O');
+            t.display();
+            t.placeMark(0,1,'M');
+            t.placeMark(0,2,'O');
+            t.display();
+            System.out.println(t.ColumnWin());
+            System.out.println("roww check "+ t.rowWin());
+      }
+      }
